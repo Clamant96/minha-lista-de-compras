@@ -4,11 +4,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.URL;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sun.istack.NotNull;
 
 @Entity
@@ -31,6 +34,18 @@ public class Produto {
 	
 	@NotNull
 	private double preco;
+	
+	@ManyToOne
+	@JsonIgnoreProperties("produtos")
+	private Usuario usuarios;
+	
+	@ManyToOne
+	@JsonIgnoreProperties("produtos")
+	private Marca marcas;
+	
+	@ManyToOne
+	@JsonIgnoreProperties("produtos")
+	private Categoria categorias;
 
 	public long getId() {
 		return id;
@@ -70,6 +85,30 @@ public class Produto {
 
 	public void setPreco(double preco) {
 		this.preco = preco;
+	}
+
+	public Usuario getUsuarios() {
+		return usuarios;
+	}
+
+	public void setUsuarios(Usuario usuarios) {
+		this.usuarios = usuarios;
+	}
+
+	public Marca getMarcas() {
+		return marcas;
+	}
+
+	public void setMarcas(Marca marcas) {
+		this.marcas = marcas;
+	}
+
+	public Categoria getCategorias() {
+		return categorias;
+	}
+
+	public void setCategorias(Categoria categorias) {
+		this.categorias = categorias;
 	}
 
 }

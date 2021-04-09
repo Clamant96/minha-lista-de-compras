@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.helpconnect.minhaListaDeCompras.model.Produto;
 import com.helpconnect.minhaListaDeCompras.repository.ProdutoRepository;
+import com.helpconnect.minhaListaDeCompras.service.UsuarioService;
 
 @RestController
 @RequestMapping("/produtos")
@@ -25,6 +26,9 @@ public class ProdutoController {
 	
 	@Autowired
 	private ProdutoRepository repository;
+	
+	@Autowired
+	private UsuarioService service;
 	
 	@GetMapping
 	public ResponseEntity<List<Produto>> findAllProdutos(){
@@ -46,14 +50,25 @@ public class ProdutoController {
 	
 	@PostMapping
 	public ResponseEntity<Produto> postProduto(@RequestBody Produto produto){
+		/* ADICIONAR PRODUTO A LISTA */
+		//this.service.adicionarProdutoLista(produto);
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(produto));
 	}
 	
-	@PutMapping
+	/*@PutMapping
 	public ResponseEntity<Produto> putProduto(@RequestBody Produto produto){
+		// ADICIONAR PRODUTO A LISTA
+		
+		this.service.adicionarProdutoLista(produto);
 		
 		return ResponseEntity.ok(repository.save(produto));
+	}*/
+	
+	@PutMapping
+	public ResponseEntity<Produto> putProdutoUsuario(@RequestBody Produto produto){
+		
+		return ResponseEntity.ok(service.gerenciarEstoque(produto));
 	}
 	
 	@DeleteMapping("/{id}")

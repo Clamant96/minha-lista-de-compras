@@ -4,7 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
@@ -77,6 +76,8 @@ public class Produto {
 
 	public void setQtdProduto(int qtdProduto) {
 		this.qtdProduto = qtdProduto;
+		
+		this.calcularSubTotal(this.getPreco(), qtdProduto);
 	}
 
 	public double getPreco() {
@@ -85,6 +86,8 @@ public class Produto {
 
 	public void setPreco(double preco) {
 		this.preco = preco;
+		
+		this.calcularSubTotal(preco, this.getQtdProduto());
 	}
 
 	public Usuario getUsuarios() {
@@ -109,6 +112,12 @@ public class Produto {
 
 	public void setCategorias(Categoria categorias) {
 		this.categorias = categorias;
+	}
+
+	public double calcularSubTotal(double preco, int qtd) {
+		double subTotal = preco * qtd;
+		
+		return subTotal;
 	}
 
 }

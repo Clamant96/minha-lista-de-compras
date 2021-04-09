@@ -19,48 +19,6 @@ public class UsuarioService {
 	@Autowired
 	private ProdutoRepository produtoRepository;
 	
-	//int i = 0;
-	
-	/*public void adicionarProdutoLista(Produto produto) {
-		
-		Optional<Produto> produtoExistente = produtoRepository.findById(produto.getId());
-		Optional<Usuario> usuarioExistente = usuarioRepository.findById(produto.getUsuarios().getId());
-		
-		double valor;
-		
-		if(produto.getQtdProduto() != produtoExistente.get().getQtdProduto()) {
-			// ALTERA O VALOR DO ORCAMENTO
-			produto.getUsuarios().setNome(usuarioExistente.get().getNome());
-			produto.getUsuarios().setOrcamento(produto.getUsuarios().getOrcamento() + produto.calcularSubTotal(produto.getPreco(), produto.getQtdProduto()));
-			
-			usuarioRepository.save(produto.getUsuarios());
-			
-		}else if(produto.getQtdProduto() == 0) {
-			System.out.println("ID usuario: "+ produto.getUsuarios().getId());
-			
-		}else {
-			// CASO REPITA A MESMA QUANTIDADE DO MESMO PRODUTO, O ORCAMENTO CONTINUA INALTERADO
-			int valorMemoria;
-			
-			if(produto.getQtdProduto() == produtoExistente.get().getQtdProduto() && i < 1) {
-				valorMemoria = produto.getQtdProduto();
-				
-				i++;
-				
-			}else {
-				valorMemoria = 0;
-				
-			}
-			
-			valor = (produtoExistente.get().getPreco() * valorMemoria);
-			usuarioExistente.get().setOrcamento(usuarioExistente.get().getOrcamento() + valor);
-			
-			usuarioRepository.save(usuarioExistente.get());
-			
-		}
-		
-	}*/
-	
 	/* GERENCIA O ESTOQUE SEMPRE QUE UM NOVO PRODUTO E SELECIONADO */
 	public Produto gerenciarEstoque(Produto produto) {
 		Optional<Produto> produtoExistente = produtoRepository.findById(produto.getId());
@@ -70,29 +28,17 @@ public class UsuarioService {
 			
 			/* AJUSTA O VALOR DOS ORCAMENTO SEMPRE QUE FOR DEBITADO UM DADO PARA EVITAR RESTOS */
 			double a = usuarioExistente.get().getOrcamento();
-				a = Math.floor(a*100) / 100;
+				a = Math.floor(a * 100) / 100;
 				usuarioExistente.get().setOrcamento(a);
 			
-			/* RECUPERA MEU ULTIMO VALOR DE ORCAMENTO CRIADO, LIMPA ELE E ATUALIZA COM UM NOVO VALOR */
-			/* POR MEIO DO ID DE MEU PRODUTO, RETIRA O VALOR INSERIDO ATE O MOMENTO DO PRODUTO E RECALCULA, INSERINDO NOVAMENTE O VALOR NO ORCAMENTO  */
-			usuarioExistente.get().setOrcamento(usuarioExistente.get().getOrcamento() - (produtoExistente.get().getPreco() * produtoExistente.get().getQtdProduto()));
-			usuarioExistente.get().setOrcamento(usuarioExistente.get().getOrcamento() + (produto.getPreco() * produto.getQtdProduto()));
-			
-			/*if(produto.getId() == produtoExistente.get().getId() && produto.getPreco() != produtoExistente.get().getPreco() || produto.getQtdProduto() != produtoExistente.get().getQtdProduto()) {
-				
-				double a = usuarioExistente.get().getOrcamento();
-				
-				a = Math.floor(a*100) / 100;
-				usuarioExistente.get().setOrcamento(a);
-				
+			/* POR MEIO DO ID E POSSIVEL RECUPERAR O ULTIMO VALOR DIGITADO EM MEMORIA, DESSA FORMA CONSEGUIMOS SUBTRAIR O VALOR EXATO, PARA QUE NAO HAJA SOBRAS NEM ERROS DE CALCULOS */
+			/* DESSA FORMA E SUBTRAIDO O VALOR EXATO DO PRECO X A ULTIMA QNT DESSE ULTIMO VALOS, ASSIM CONSEGUIFIR FICAR SOMENTE COM OS OUTROS PRODUTOS QUE NAO ESTAO SENDO ALTERADOS */
+			/* APOS ESSA SUBTRACAO, O VALOR DO PRODUTO E RECALCULADO NOVAMENTE DE ACORDO COM A QUANTIDADE DE PRODUTOS E INSERIDOS NOVAMNTE DENTRO DO ORCAMENTO */
+			if(produtoExistente.get().getPreco() != produto.getPreco() || produtoExistente.get().getQtdProduto() != produto.getQtdProduto()) {
 				usuarioExistente.get().setOrcamento(usuarioExistente.get().getOrcamento() - (produtoExistente.get().getPreco() * produtoExistente.get().getQtdProduto()));
-				
 				usuarioExistente.get().setOrcamento(usuarioExistente.get().getOrcamento() + (produto.getPreco() * produto.getQtdProduto()));
 				
-			}else {
-				usuarioExistente.get().setOrcamento(usuarioExistente.get().getOrcamento() + (produto.getPreco() * produto.getQtdProduto()));
-				
-			}*/
+			}
 			
 			/* CASO A QTD PRODUTOS SEJA 0, O PRODUTO ALTOMATICAMENTE E RETIRADO DA LISTA DO USUARIO */
 			if(produto.getQtdProduto() == 0) {

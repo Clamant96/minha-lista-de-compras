@@ -35,7 +35,9 @@ public class UsuarioService {
 			/* DESSA FORMA E SUBTRAIDO O VALOR EXATO DO PRECO X A ULTIMA QNT DESSE ULTIMO VALOS, ASSIM CONSEGUIFIR FICAR SOMENTE COM OS OUTROS PRODUTOS QUE NAO ESTAO SENDO ALTERADOS */
 			/* APOS ESSA SUBTRACAO, O VALOR DO PRODUTO E RECALCULADO NOVAMENTE DE ACORDO COM A QUANTIDADE DE PRODUTOS E INSERIDOS NOVAMNTE DENTRO DO ORCAMENTO */
 			if(produtoExistente.get().getPreco() != produto.getPreco() || produtoExistente.get().getQtdProduto() != produto.getQtdProduto()) {
+				/* SUBITRAI O ANTIGO VALOR */
 				usuarioExistente.get().setOrcamento(usuarioExistente.get().getOrcamento() - (produtoExistente.get().getPreco() * produtoExistente.get().getQtdProduto()));
+				/* SALVA O NOVO VALOR */
 				usuarioExistente.get().setOrcamento(usuarioExistente.get().getOrcamento() + (produto.getPreco() * produto.getQtdProduto()));
 				
 			}

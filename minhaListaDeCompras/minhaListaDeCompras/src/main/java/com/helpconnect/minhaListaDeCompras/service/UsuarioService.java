@@ -19,17 +19,14 @@ public class UsuarioService {
 	@Autowired
 	private ProdutoRepository produtoRepository;
 	
+	double a = 0;
+	
 	/* GERENCIA O ESTOQUE SEMPRE QUE UM NOVO PRODUTO E SELECIONADO */
 	public Produto gerenciarEstoque(Produto produto) {
 		Optional<Produto> produtoExistente = produtoRepository.findById(produto.getId());
 		
 		if(produto.getUsuarios() != null) {
 			Optional<Usuario> usuarioExistente = usuarioRepository.findById(produto.getUsuarios().getId());
-			
-			/* AJUSTA O VALOR DOS ORCAMENTO SEMPRE QUE FOR DEBITADO UM DADO PARA EVITAR RESTOS */
-			double a = usuarioExistente.get().getOrcamento();
-				a = Math.floor(a * 100) / 100;
-				usuarioExistente.get().setOrcamento(a);
 			
 			/* POR MEIO DO ID E POSSIVEL RECUPERAR O ULTIMO VALOR DIGITADO EM MEMORIA, DESSA FORMA CONSEGUIMOS SUBTRAIR O VALOR EXATO, PARA QUE NAO HAJA SOBRAS NEM ERROS DE CALCULOS */
 			/* DESSA FORMA E SUBTRAIDO O VALOR EXATO DO PRECO X A ULTIMA QNT DESSE ULTIMO VALOS, ASSIM CONSEGUIFIR FICAR SOMENTE COM OS OUTROS PRODUTOS QUE NAO ESTAO SENDO ALTERADOS */
@@ -41,6 +38,11 @@ public class UsuarioService {
 				usuarioExistente.get().setOrcamento(usuarioExistente.get().getOrcamento() + (produto.getPreco() * produto.getQtdProduto()));
 				
 			}
+			
+			/* AJUSTA O VALOR DOS ORCAMENTO SEMPRE QUE FOR DEBITADO UM DADO PARA EVITAR RESTOS */
+			a = usuarioExistente.get().getOrcamento();
+			a = Math.floor(a * 100) / 100;
+				usuarioExistente.get().setOrcamento(a);
 			
 			/* CASO A QTD PRODUTOS SEJA 0, O PRODUTO ALTOMATICAMENTE E RETIRADO DA LISTA DO USUARIO */
 			if(produto.getQtdProduto() == 0) {

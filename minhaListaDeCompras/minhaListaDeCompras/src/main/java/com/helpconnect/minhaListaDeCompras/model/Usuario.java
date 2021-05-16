@@ -26,6 +26,9 @@ public class Usuario {
 	@Size(max = 50)
 	private String nome;
 	
+	@NotNull
+	private String senha;
+	
 	private double orcamento;
 	
 	@OneToMany(mappedBy = "usuarios", cascade = CascadeType.ALL)
@@ -62,6 +65,14 @@ public class Usuario {
 
 	public void setProdutos(List<Produto> produtos) {
 		this.produtos = produtos;
+	}
+
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.helpconnect.minhaListaDeCompras.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.helpconnect.minhaListaDeCompras.model.Usuario;
+import com.helpconnect.minhaListaDeCompras.model.UsuarioLogin;
 import com.helpconnect.minhaListaDeCompras.repository.UsuarioRepository;
+import com.helpconnect.minhaListaDeCompras.service.UsuarioService;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -25,6 +28,9 @@ public class UsuarioController {
 	
 	@Autowired
 	private UsuarioRepository repository;
+	
+	@Autowired
+	private UsuarioService usuarioService;
 	
 	@GetMapping
 	public ResponseEntity<List<Usuario>> findAllUsuarios(){
@@ -40,10 +46,24 @@ public class UsuarioController {
 				.orElse(ResponseEntity.notFound().build());
 	}
 	
-	@PostMapping
-	public ResponseEntity<Usuario> postUsuario(@RequestBody Usuario usuario){
+	@PostMapping("/logar")
+	public ResponseEntity<UsuarioLogin> Autentication(@RequestBody Optional<UsuarioLogin> user) {
+		return usuarioService.Logar(user).map(resp -> ResponseEntity.ok(resp))
+				.orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+	}
+
+	@PostMapping("/cadastrar")
+	public ResponseEntity<Usuario> Post(@RequestBody Usuario usuario) {
+		Optional<Usuario> user = usuarioService.CadastrarUsuario(usuario);
 		
-		return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(usuario));
+		try {
+			return ResponseEntity.ok(user.get());
+			
+		}catch(Exception e) {
+			return ResponseEntity.badRequest().build();
+			
+		}
+		
 	}
 	
 	@PutMapping

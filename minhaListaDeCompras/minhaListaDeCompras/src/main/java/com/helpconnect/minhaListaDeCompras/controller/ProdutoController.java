@@ -53,7 +53,7 @@ public class ProdutoController {
 		/* ADICIONAR PRODUTO A LISTA */
 		//this.service.adicionarProdutoLista(produto);
 		
-		return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(produto));
+		return ResponseEntity.status(HttpStatus.CREATED).body(service.cadastrarProduto(produto));
 	}
 	
 	/*@PutMapping
